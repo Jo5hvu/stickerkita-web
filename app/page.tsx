@@ -2,7 +2,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Products from "@/components/Products";
 import DesignGallery from "@/components/DesignGallery";
-import Templates from "@/components/Templates";
+import StickerPriceCalculator from "@/components/StickerPriceCalculator";
 import TermsProcess from "@/components/TermsProcess";
 import FAQ from "@/components/FAQ";
 import OrderCTA from "@/components/OrderCTA";
@@ -15,7 +15,7 @@ export default function Home() {
       <Hero />
       <Products />
       <DesignGallery />
-      <Templates />
+      <StickerPriceCalculator />
       <TermsProcess />
       <FAQ />
       <OrderCTA />

@@ -1,5 +1,4 @@
 export const designCategories = [
-  "All",
   "Transparent",
   "Masakan",
   "Kuih & Kerepek",

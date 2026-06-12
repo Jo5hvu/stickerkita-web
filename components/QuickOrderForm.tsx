@@ -3,145 +3,205 @@
 import { useState } from "react";
 import { BRAND } from "@/lib/constants";
 
+type CartItem = {
+  id: number;
+  material: string;
+  designCode: string;
+  shape: string;
+  size: string;
+  quantity: number;
+  price: number;
+};
+
+const PRICE_PER_1000 = 59;
+
 export default function QuickOrderForm() {
-  const [formData, setFormData] = useState({
+  const [customerData, setCustomerData] = useState({
     name: "",
     business: "",
     phone: "",
     email: "",
-    material: "",
-    designCode: "",
-    size: "",
-    shape: "",
-    quantity: "",
     deliveryMethod: "",
     address: "",
     designDescription: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [orderNumber, setOrderNumber] = useState<string | null>(null);
+  const [itemData, setItemData] = useState({
+    material: "",
+    designCode: "",
+    shape: "",
+    size: "",
+    quantity: "",
+  });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCustomerChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
-    setFormData({
-      ...formData,
+    setCustomerData({
+      ...customerData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const generateWhatsAppMessage = (savedOrderNumber: string) => {
-    const message = `*NEW STICKERKITA ORDER #${savedOrderNumber}*
+  const handleItemChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setItemData({
+      ...itemData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const calculateItemPrice = (quantity: number) => {
+    const blocks = Math.ceil(quantity / 1000);
+    return blocks * PRICE_PER_1000;
+  };
+
+  const addToCart = () => {
+    if (
+      !itemData.material ||
+      !itemData.shape ||
+      !itemData.size ||
+      !itemData.quantity
+    ) {
+      alert("Please complete the sticker item details first.");
+      return;
+    }
+
+    const quantity = Number(itemData.quantity);
+
+    if (quantity <= 0) {
+      alert("Quantity must be more than 0.");
+      return;
+    }
+
+    const newItem: CartItem = {
+      id: Date.now(),
+      material: itemData.material,
+      designCode: itemData.designCode || "Own design / Not selected",
+      shape: itemData.shape,
+      size: itemData.size,
+      quantity,
+      price: calculateItemPrice(quantity),
+    };
+
+    setCart([...cart, newItem]);
+
+    setItemData({
+      material: "",
+      designCode: "",
+      shape: "",
+      size: "",
+      quantity: "",
+    });
+  };
+
+  const removeFromCart = (id: number) => {
+    setCart(cart.filter((item) => item.id !== id));
+  };
+
+  const totalAmount = cart.reduce((total, item) => total + item.price, 0);
+
+  const generateWhatsAppMessage = (invoiceNo: string) => {
+    const cartDetails = cart
+      .map(
+        (item, index) => `
+*Item ${index + 1}*
+Material: ${item.material}
+Design Code: ${item.designCode}
+Shape: ${item.shape}
+Size: ${item.size}
+Quantity: ${item.quantity} pcs
+Price: RM${item.price.toFixed(2)}`
+      )
+      .join("\n");
+
+    const message = `*NEW STICKERKITA ORDER*
+
+    *Invoice Code*
+    ${invoiceNo}
 
 *Customer Details*
-Name: ${formData.name}
-Business/Brand: ${formData.business || "-"}
-Phone: ${formData.phone}
-Email: ${formData.email || "-"}
+Name: ${customerData.name}
+Business/Brand: ${customerData.business || "-"}
+Phone: ${customerData.phone}
+Email: ${customerData.email || "-"}
 
-*Sticker Details*
-Material: ${formData.material}
-Design Code: ${formData.designCode || "Own design / Not selected"}
-Shape: ${formData.shape}
-Size: ${formData.size}
-Quantity: ${formData.quantity} pcs
+*Cart Details*
+${cartDetails}
+
+*Order Summary*
+Total Items: ${cart.length}
+Total Amount: RM${totalAmount.toFixed(2)}
 
 *Delivery Details*
-Delivery Method: ${formData.deliveryMethod}
-Address: ${formData.address || "-"}
+Delivery Method: ${customerData.deliveryMethod}
+Address: ${customerData.address || "-"}
 
 *Design Notes*
-${formData.designDescription || "-"}
+${customerData.designDescription || "-"}
 
-Order saved in system. Please confirm price and payment.`;
+Please confirm the invoice and payment details.`;
 
     return encodeURIComponent(message);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (cart.length === 0) {
+      alert("Please add at least one sticker item to cart.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      // Step 1: Save to Supabase
       const response = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...customerData,
+          cartItems: cart,
+          itemCount: cart.length,
+          subtotal: totalAmount,
+          totalDue: totalAmount,
+        }),
       });
 
       const result = await response.json();
 
       if (!result.success) {
-        alert("Order could not be saved. Please try again.");
-        setIsSubmitting(false);
+        alert(`Order could not be saved: ${result.message}`);
         return;
       }
 
-      // Step 2: Store order number for display
-      setOrderNumber(result.orderNumber);
+      const invoiceNo = result.invoiceNo || result.order?.invoice_no;
 
-      // Step 3: Send WhatsApp message with order number
       const whatsappNumber = BRAND.whatsapp;
-      const url = `https://wa.me/${whatsappNumber}?text=${generateWhatsAppMessage(result.orderNumber)}`;
+      const url = `https://wa.me/${whatsappNumber}?text=${generateWhatsAppMessage(
+        invoiceNo
+      )}`;
 
-      window.open(url, "_blank");
-
-      // Step 4: Optional - Reset form after successful submission
-      setFormData({
-        name: "",
-        business: "",
-        phone: "",
-        email: "",
-        material: "",
-        designCode: "",
-        size: "",
-        shape: "",
-        quantity: "",
-        deliveryMethod: "",
-        address: "",
-        designDescription: "",
-      });
-
+      window.location.href = url;
     } catch (error) {
-      console.error("Submission error:", error);
       alert("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Show success message if order was saved
-  if (orderNumber) {
-    return (
-      <div className="rounded-2xl bg-green-50 p-8 text-center">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-          <span className="text-3xl">✅</span>
-        </div>
-        <h3 className="mb-2 text-2xl font-bold text-green-800">Order Received!</h3>
-        <p className="mb-4 text-green-700">
-          Your order number: <strong className="text-lg">{orderNumber}</strong>
-        </p>
-        <p className="text-sm text-green-600">
-          WhatsApp has opened with your order details. Please send your design file there.
-        </p>
-        <button
-          onClick={() => setOrderNumber(null)}
-          className="mt-6 rounded-full bg-[#FD7C03] px-6 py-2 text-white"
-        >
-          Place Another Order
-        </button>
-      </div>
-    );
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-8">
       {/* Customer Details */}
-      <div>
+      <section>
         <h3 className="mb-4 text-xl font-bold">Customer Details</h3>
 
         <div className="grid gap-4 md:grid-cols-2">
@@ -150,8 +210,8 @@ Order saved in system. Please confirm price and payment.`;
             name="name"
             placeholder="Your Name *"
             className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-            value={formData.name}
-            onChange={handleChange}
+            value={customerData.name}
+            onChange={handleCustomerChange}
             required
           />
 
@@ -160,8 +220,8 @@ Order saved in system. Please confirm price and payment.`;
             name="business"
             placeholder="Business / Brand Name"
             className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-            value={formData.business}
-            onChange={handleChange}
+            value={customerData.business}
+            onChange={handleCustomerChange}
           />
 
           <input
@@ -169,8 +229,8 @@ Order saved in system. Please confirm price and payment.`;
             name="phone"
             placeholder="Phone Number *"
             className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-            value={formData.phone}
-            onChange={handleChange}
+            value={customerData.phone}
+            onChange={handleCustomerChange}
             required
           />
 
@@ -179,48 +239,59 @@ Order saved in system. Please confirm price and payment.`;
             name="email"
             placeholder="Email Address"
             className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-            value={formData.email}
-            onChange={handleChange}
+            value={customerData.email}
+            onChange={handleCustomerChange}
           />
         </div>
-      </div>
+      </section>
 
-      {/* Sticker Details */}
-      <div>
-        <h3 className="mb-4 text-xl font-bold">Sticker Details</h3>
+      {/* Add Sticker Item */}
+      <section className="rounded-[2rem] bg-[#FFF7EF] p-5 md:p-6">
+        <div className="mb-4 flex flex-col justify-between gap-2 md:flex-row md:items-center">
+          <div>
+            <h3 className="text-xl font-bold">Add Sticker Item</h3>
+            <p className="mt-1 text-sm text-[#6F625A]">
+              Add one or more sticker items before submitting your order.
+            </p>
+          </div>
+
+          <span className="w-fit rounded-full bg-[#FFE1C2] px-4 py-2 text-xs font-bold text-[#FD7C03]">
+            RM59 / 1000 pcs
+          </span>
+        </div>
 
         <div className="grid gap-4 md:grid-cols-2">
           <select
             name="material"
             className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-            value={formData.material}
-            onChange={handleChange}
-            required
+            value={itemData.material}
+            onChange={handleItemChange}
           >
-            <option value="">Select Sticker Material *</option>
-            <option value="Mirrorcoat">Mirrorcoat</option>
-            <option value="Mirrorcoat + Gloss">Mirrorcoat + Gloss</option>
-            <option value="Waterproof">Waterproof</option>
-            <option value="Transparent">Transparent</option>
+            <option value="">Select Sticker Material</option>
+            <option value="Mirrorcoat">Mirrorcoat - RM59 / 1000 pcs</option>
+            <option value="Transparent White Ink">
+              Transparent White Ink - RM59 /  500 pcs
+            </option>
+            <option value="Waterproof">Waterproof - RM59 / 1000 pcs</option>
+            <option value="Transparent">Transparent - RM59 / 1000 pcs</option>
           </select>
 
           <input
             type="text"
             name="designCode"
-            placeholder="Design Code e.g. MS-001 / CT-002"
+            placeholder="Design Code e.g. CT-002"
             className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-            value={formData.designCode}
-            onChange={handleChange}
+            value={itemData.designCode}
+            onChange={handleItemChange}
           />
 
           <select
             name="shape"
             className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-            value={formData.shape}
-            onChange={handleChange}
-            required
+            value={itemData.shape}
+            onChange={handleItemChange}
           >
-            <option value="">Select Shape *</option>
+            <option value="">Select Shape</option>
             <option value="Circle">Circle</option>
             <option value="Square">Square</option>
             <option value="Rectangle">Rectangle</option>
@@ -231,70 +302,151 @@ Order saved in system. Please confirm price and payment.`;
           <input
             type="text"
             name="size"
-            placeholder="Size e.g. 4cm / 5cm / 5x5cm *"
+            placeholder="Size e.g. 4cm / 5x5cm"
             className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-            value={formData.size}
-            onChange={handleChange}
-            required
+            value={itemData.size}
+            onChange={handleItemChange}
           />
 
           <input
             type="number"
             name="quantity"
-            placeholder="Quantity / pcs *"
+            placeholder="Quantity / pcs"
             className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-            value={formData.quantity}
-            onChange={handleChange}
+            value={itemData.quantity}
+            onChange={handleItemChange}
             min="1"
-            required
           />
 
+          <button
+            type="button"
+            onClick={addToCart}
+            className="rounded-full bg-[#2B1B12] px-8 py-4 font-semibold text-white transition hover:opacity-90"
+          >
+            Add to Cart
+          </button>
+        </div>
+
+        <p className="mt-4 text-xs leading-5 text-[#6F625A]">
+          Price is calculated at RM59 per 1000 pcs. Quantity below 1000 pcs is
+          still counted as one 1000 pcs block.
+        </p>
+      </section>
+
+      {/* Cart Summary */}
+      <section>
+        <h3 className="mb-4 text-xl font-bold">Cart Summary</h3>
+
+        {cart.length === 0 ? (
+          <div className="rounded-3xl border border-dashed border-[#EAD8C8] bg-white p-6 text-center text-sm text-[#6F625A]">
+            No sticker item added yet.
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {cart.map((item, index) => (
+              <div
+                key={item.id}
+                className="rounded-3xl border border-[#EAD8C8] bg-white p-5"
+              >
+                <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
+                  <div>
+                    <p className="mb-2 text-sm font-bold text-[#FD7C03]">
+                      Item {index + 1}
+                    </p>
+
+                    <h4 className="text-lg font-bold">{item.material}</h4>
+
+                    <p className="mt-2 text-sm leading-6 text-[#6F625A]">
+                      Design: {item.designCode}
+                      <br />
+                      Shape: {item.shape}
+                      <br />
+                      Size: {item.size}
+                      <br />
+                      Quantity: {item.quantity} pcs
+                    </p>
+                  </div>
+
+                  <div className="text-left md:text-right">
+                    <p className="text-xl font-bold text-[#FD7C03]">
+                      RM{item.price.toFixed(2)}
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => removeFromCart(item.id)}
+                      className="mt-3 text-sm font-semibold text-red-500"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <div className="rounded-3xl bg-[#2B1B12] p-5 text-white">
+              <div className="flex items-center justify-between">
+                <p className="font-semibold">Total Amount</p>
+                <p className="text-2xl font-bold">
+                  RM{totalAmount.toFixed(2)}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* Delivery Details */}
+      <section>
+        <h3 className="mb-4 text-xl font-bold">Delivery Details</h3>
+
+        <div className="grid gap-4 md:grid-cols-2">
           <select
             name="deliveryMethod"
             className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-            value={formData.deliveryMethod}
-            onChange={handleChange}
+            value={customerData.deliveryMethod}
+            onChange={handleCustomerChange}
             required
           >
             <option value="">Delivery Method *</option>
             <option value="Postage">Postage</option>
             <option value="Self Pickup">Self Pickup</option>
-            <option value="Runner / Local Delivery">Runner / Local Delivery</option>
+            <option value="Runner / Local Delivery">
+              Runner / Local Delivery
+            </option>
           </select>
         </div>
-      </div>
 
-      {/* Address */}
-      <textarea
-        name="address"
-        placeholder="Delivery Address"
-        className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-        rows={3}
-        value={formData.address}
-        onChange={handleChange}
-      />
+        <textarea
+          name="address"
+          placeholder="Delivery Address"
+          className="mt-4 w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
+          rows={3}
+          value={customerData.address}
+          onChange={handleCustomerChange}
+        />
 
-      {/* Design Notes */}
-      <textarea
-        name="designDescription"
-        placeholder="Design notes. Example: Change name to Soft Cookies, use soft pink theme, add halal logo, etc."
-        className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
-        rows={4}
-        value={formData.designDescription}
-        onChange={handleChange}
-      />
+        <textarea
+          name="designDescription"
+          placeholder="Overall design notes. Example: Use soft pink theme, add halal logo, change brand name, etc."
+          className="mt-4 w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
+          rows={4}
+          value={customerData.designDescription}
+          onChange={handleCustomerChange}
+        />
+      </section>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full rounded-full bg-[#FD7C03] px-8 py-4 font-semibold text-white shadow-md transition hover:opacity-90 disabled:opacity-50"
+        className="w-full rounded-full bg-[#FD7C03] px-8 py-4 font-semibold text-white shadow-md transition hover:opacity-90 disabled:opacity-60"
       >
-        {isSubmitting ? "Saving Order..." : "Send Order via WhatsApp →"}
+        {isSubmitting ? "Submitting Order..." : "Submit Order via WhatsApp →"}
       </button>
 
       <p className="text-center text-xs leading-5 text-[#6F625A]">
-        Your order will be saved in our system. WhatsApp will open with order details.
-        Please send your design file separately in WhatsApp.
+        Your order will be saved in our system first. After that, WhatsApp will
+        open with your full order details.
       </p>
     </form>
   );

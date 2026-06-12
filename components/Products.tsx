@@ -25,11 +25,6 @@ export default function Products() {
               key={product.name}
               className="flex h-full flex-col rounded-3xl border border-[#EAD8C8] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
-              <div className="mb-5 flex h-32 items-center justify-center rounded-2xl bg-[#FFF7EF]">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#FFE1C2] text-2xl font-bold text-[#FD7C03]">
-                  {product.name.charAt(0)}
-                </div>
-              </div>
 
               <span className="mb-3 w-fit rounded-full bg-[#FFE1C2] px-3 py-1 text-xs font-semibold text-[#FD7C03]">
                 {product.tag}
@@ -37,7 +32,12 @@ export default function Products() {
 
               <h3 className="text-xl font-bold">{product.name}</h3>
 
-              <p className="mt-3 flex-1 text-sm leading-6 text-[#6F625A]">
+              <div className="mt-3 rounded-2xl bg-[#FFF7EF] px-4 py-3">
+                <p className="text-sm text-[#6F625A]">Starting price</p>
+                <p className="text-xl font-bold text-[#FD7C03]">{product.price}</p>
+              </div>
+              
+              <p className="mt-4 flex-1 text-sm leading-6 text-[#6F625A]">
                 {product.description}
               </p>
 

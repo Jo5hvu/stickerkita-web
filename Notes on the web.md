@@ -16,6 +16,10 @@ C:\\Users\\harit\\stickerkita-web>npm run dev
 
 
 
+**http://localhost:3000/admin/orders**
+
+
+
 **Invoice Generation**
 
 Stage 1:
@@ -54,7 +58,7 @@ Export monthly orders to Excel
 
 3\. Add pricing guide section
 
-4\. Improve product cards with real images
+~~4. Improve product cards with real images~~
 
 5\. Improve order form
 
@@ -77,4 +81,16 @@ Database is safer from public direct inserts
 You can validate orders in your API route
 
 You can later add spam protection / captcha / admin dashboard
+
+
+
+1\. Add order success message before WhatsApp opens
+
+2\. Add admin order monitoring page
+
+3\. Add status dropdown: New, Designing, Printing, Completed
+
+4\. Add invoice PDF generation
+
+5\. Add Excel export for monthly orders
 

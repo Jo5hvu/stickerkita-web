@@ -11,8 +11,15 @@ export default function Footer() {
             className="w-36 md:w-44"
           />
           <p className="mt-3 max-w-sm text-sm leading-6 text-[#6F625A]">
-            Premium custom stickers for brands, packaging, events, and small
-            businesses.
+            <a
+              href={`${BRAND.address}`}
+              target="_blank"
+              className="hover:text-[#FD7C03]"
+            >
+            32, Jln Bpm 5, 
+            Taman Bukit Piatu Mutiara, 
+            75150 Melaka
+            </a>
           </p>
         </div>
 
@@ -22,11 +29,20 @@ export default function Footer() {
             <a href="#products" className="hover:text-[#FD7C03]">
               Products
             </a>
-            <a href="#templates" className="hover:text-[#FD7C03]">
-              Templates
+                        <a href="#calculator" className="hover:text-[#FD7C03]">
+              Calculator
+            </a>
+            <a href="#designs" className="hover:text-[#FD7C03]">
+              Designs
             </a>
             <a href="#how-it-works" className="hover:text-[#FD7C03]">
               How It Works
+            </a>
+            <a href="#terms-process" className="hover:text-[#FD7C03]">
+              Process
+            </a>
+            <a href="#faq" className="hover:text-[#FD7C03]">
+              FAQ
             </a>
             <a href="#order" className="hover:text-[#FD7C03]">
               Order
@@ -45,7 +61,7 @@ export default function Footer() {
               WhatsApp: +{BRAND.whatsapp}
             </a>
             <a href={`mailto:${BRAND.email}`} className="hover:text-[#FD7C03]">
-              {BRAND.email}
+              Email: {BRAND.email}
             </a>
           </div>
         </div>

@@ -19,8 +19,8 @@ export default function Navigation() {
           <a href="#designs" className="hover:text-[#FD7C03]">
             Designs
           </a>
-          <a href="#templates" className="hover:text-[#FD7C03]">
-            Templates
+          <a href="#calculator" className="hover:text-[#FD7C03]">
+            Calculator
           </a>
           <a href="#how-it-works" className="hover:text-[#FD7C03]">
             How It Works

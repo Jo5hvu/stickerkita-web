@@ -1,24 +1,57 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
-function generateInvoiceNo() {
+function getMalaysiaDateParts() {
   const now = new Date();
 
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  const time = String(now.getTime()).slice(-5);
+  const malaysiaDate = new Date(
+    now.toLocaleString("en-US", { timeZone: "Asia/Kuala_Lumpur" })
+  );
 
-  return `SKT${year}${month}${day}${time}`;
+  const day = String(malaysiaDate.getDate()).padStart(2, "0");
+  const month = String(malaysiaDate.getMonth() + 1).padStart(2, "0");
+
+  const startOfDay = new Date(malaysiaDate);
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date(malaysiaDate);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  return {
+    day,
+    month,
+    startOfDay,
+    endOfDay,
+  };
+}
+
+async function generateInvoiceNo() {
+  const { day, month, startOfDay, endOfDay } = getMalaysiaDateParts();
+
+  const { count, error } = await supabaseAdmin
+    .from("orders")
+    .select("id", { count: "exact", head: true })
+    .gte("created_at", startOfDay.toISOString())
+    .lte("created_at", endOfDay.toISOString());
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const dailyOrderNumber = (count || 0) + 1;
+  const runningNumber = String(dailyOrderNumber).padStart(2, "0");
+
+  return `STK${day}${month}1${runningNumber}`;
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    console.log("ORDER BODY:", body);
+    const invoiceNo = await generateInvoiceNo();
 
-    const invoiceNo = generateInvoiceNo();
+    const cartItems = body.cartItems || [];
+    const firstItem = cartItems[0];
 
     const orderData = {
       invoice_no: invoiceNo,
@@ -28,11 +61,14 @@ export async function POST(request: Request) {
       phone: body.phone,
       email: body.email || null,
 
-      material: body.material,
-      design_code: body.designCode || null,
-      shape: body.shape,
-      size: body.size,
-      quantity: Number(body.quantity),
+      material: firstItem?.material || "-",
+      design_code: firstItem?.designCode || null,
+      shape: firstItem?.shape || "-",
+      size: firstItem?.size || "-",
+      quantity: firstItem?.quantity || 0,
+
+      cart_items: cartItems,
+      item_count: body.itemCount || cartItems.length,
 
       delivery_method: body.deliveryMethod,
       address: body.address || null,
@@ -40,9 +76,12 @@ export async function POST(request: Request) {
 
       status: "New",
       payment_status: "Unpaid",
-    };
 
-    console.log("ORDER DATA TO INSERT:", orderData);
+      subtotal: body.subtotal || 0,
+      deposit: 0,
+      shipping_fee: 0,
+      total_due: body.totalDue || body.subtotal || 0,
+    };
 
     const { data, error } = await supabaseAdmin
       .from("orders")
@@ -57,7 +96,6 @@ export async function POST(request: Request) {
         {
           success: false,
           message: error.message,
-          details: error,
         },
         { status: 500 }
       );
@@ -66,6 +104,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       message: "Order saved successfully",
+      invoiceNo: data.invoice_no,
       order: data,
     });
   } catch (error) {
@@ -74,8 +113,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         success: false,
-        message: "API route crashed",
-        error: String(error),
+        message: "Something went wrong while saving the order.",
       },
       { status: 500 }
     );

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-type Order = {
+type CartItem = {
   id: string;
   invoice_no: string;
   customer_name: string;
@@ -19,6 +19,16 @@ type Order = {
   design_notes: string | null;
   status: string;
   payment_status: string;
+  cart_items: Array<{
+    material: string;
+    shape: string;
+    size: string;
+    quantity: number;
+    designCode: string;
+  }> | null;
+  item_count: number | null;
+  subtotal: number | null;
+  total_due: number | null;
   created_at: string;
 };
 
@@ -37,7 +47,7 @@ const orderStatuses = [
 
 const paymentStatuses = ["Unpaid", "Deposit Paid", "Paid", "Refunded"];
 
-export default function AdminOrdersTable({ orders }: { orders: Order[] }) {
+export default function AdminOrdersTable({ orders }: { orders: CartItem[] }) {
   const [orderList, setOrderList] = useState(orders);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
@@ -92,18 +102,18 @@ export default function AdminOrdersTable({ orders }: { orders: Order[] }) {
   return (
     <div className="overflow-hidden rounded-[2rem] bg-white shadow-xl">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[1100px] border-collapse text-left text-sm">
+        <table className="w-full min-w-[1200px] border-collapse text-left text-sm">
           <thead className="bg-[#2B1B12] text-white">
             <tr>
               <th className="p-4">Invoice</th>
               <th className="p-4">Customer</th>
               <th className="p-4">Phone</th>
-              <th className="p-4">Sticker</th>
+              <th className="p-4">Sticker Details</th>
               <th className="p-4">Design</th>
-              <th className="p-4">Qty</th>
               <th className="p-4">Delivery</th>
               <th className="p-4">Order Status</th>
               <th className="p-4">Payment</th>
+              <th className="p-4">Total</th>
               <th className="p-4">Date</th>
             </tr>
           </thead>
@@ -114,10 +124,12 @@ export default function AdminOrdersTable({ orders }: { orders: Order[] }) {
                 key={order.id}
                 className="border-b border-[#EAD8C8] align-top hover:bg-[#FFF7EF]"
               >
+                {/* Invoice Column */}
                 <td className="p-4 font-bold text-[#FD7C03]">
                   {order.invoice_no}
                 </td>
 
+                {/* Customer Column */}
                 <td className="p-4">
                   <p className="font-semibold">{order.customer_name}</p>
                   <p className="text-xs text-[#6F625A]">
@@ -128,23 +140,39 @@ export default function AdminOrdersTable({ orders }: { orders: Order[] }) {
                   </p>
                 </td>
 
+                {/* Phone Column */}
                 <td className="p-4">
                   <a
                     href={`https://wa.me/6${order.phone.replace(/^0/, "")}`}
                     target="_blank"
-                    className="font-semibold text-[#FD7C03]"
+                    className="font-semibold text-[#FD7C03] hover:underline"
                   >
                     {order.phone}
                   </a>
                 </td>
 
+                {/* Sticker Details Column - REPLACED WITH NEW CODE */}
                 <td className="p-4">
-                  <p className="font-semibold">{order.material}</p>
-                  <p className="text-xs text-[#6F625A]">
-                    {order.shape}, {order.size}
+                  <p className="font-semibold">
+                    {order.item_count || 1} item(s)
                   </p>
+
+                  <div className="mt-2 space-y-2">
+                    {(order.cart_items || []).map((item, index) => (
+                      <div key={index} className="text-xs leading-5 text-[#6F625A]">
+                        <span className="font-bold text-[#2B1B12]">
+                          {index + 1}. {item.material}
+                        </span>
+                        <br />
+                        {item.shape}, {item.size}, {item.quantity} pcs
+                        <br />
+                        Design: {item.designCode}
+                      </div>
+                    ))}
+                  </div>
                 </td>
 
+                {/* Design Column */}
                 <td className="p-4">
                   <p className="font-semibold">{order.design_code || "-"}</p>
                   <p className="max-w-[180px] text-xs leading-5 text-[#6F625A]">
@@ -152,8 +180,7 @@ export default function AdminOrdersTable({ orders }: { orders: Order[] }) {
                   </p>
                 </td>
 
-                <td className="p-4 font-semibold">{order.quantity} pcs</td>
-
+                {/* Delivery Column */}
                 <td className="p-4">
                   <p className="font-semibold">{order.delivery_method}</p>
                   <p className="max-w-[180px] whitespace-pre-line text-xs leading-5 text-[#6F625A]">
@@ -161,6 +188,7 @@ export default function AdminOrdersTable({ orders }: { orders: Order[] }) {
                   </p>
                 </td>
 
+                {/* Order Status Column */}
                 <td className="p-4">
                   <select
                     value={order.status}
@@ -168,7 +196,7 @@ export default function AdminOrdersTable({ orders }: { orders: Order[] }) {
                     onChange={(e) =>
                       updateOrder(order.id, "status", e.target.value)
                     }
-                    className="rounded-full border border-[#EAD8C8] bg-white px-3 py-2 text-xs font-semibold outline-none focus:border-[#FD7C03]"
+                    className="rounded-full border border-[#EAD8C8] bg-white px-3 py-2 text-xs font-semibold outline-none focus:border-[#FD7C03] disabled:opacity-50"
                   >
                     {orderStatuses.map((status) => (
                       <option key={status} value={status}>
@@ -178,6 +206,7 @@ export default function AdminOrdersTable({ orders }: { orders: Order[] }) {
                   </select>
                 </td>
 
+                {/* Payment Status Column */}
                 <td className="p-4">
                   <select
                     value={order.payment_status}
@@ -185,7 +214,7 @@ export default function AdminOrdersTable({ orders }: { orders: Order[] }) {
                     onChange={(e) =>
                       updateOrder(order.id, "payment_status", e.target.value)
                     }
-                    className="rounded-full border border-[#EAD8C8] bg-white px-3 py-2 text-xs font-semibold outline-none focus:border-[#FD7C03]"
+                    className="rounded-full border border-[#EAD8C8] bg-white px-3 py-2 text-xs font-semibold outline-none focus:border-[#FD7C03] disabled:opacity-50"
                   >
                     {paymentStatuses.map((status) => (
                       <option key={status} value={status}>
@@ -195,6 +224,12 @@ export default function AdminOrdersTable({ orders }: { orders: Order[] }) {
                   </select>
                 </td>
 
+                {/* Total Price Column - NEW */}
+                <td className="p-4 font-bold text-[#FD7C03]">
+                  RM{Number(order.total_due || 0).toFixed(2)}
+                </td>
+
+                {/* Date Column */}
                 <td className="p-4 text-xs text-[#6F625A]">
                   {new Date(order.created_at).toLocaleDateString("en-MY", {
                     day: "2-digit",

@@ -1,9 +1,10 @@
 export const BRAND = {
   name: "StickerKita",
   tagline: "Your Brand, Everywhere",
-  whatsapp: "601160934779",
+  whatsapp: "60106630045",
   email: "stickerkita04@gmail.com",
   instagram: "https://instagram.com/stickerkita",
+  address: "https://share.google/nvEHI34ylKmDGj2fv"
 };
 
 export const COLORS = {
