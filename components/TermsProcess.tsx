@@ -6,11 +6,11 @@ export default function TermsProcess() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 text-center">
           <p className="mb-3 inline-block rounded-full bg-[#FFE1C2] px-4 py-2 text-xs font-semibold text-[#FD7C03] md:text-sm">
-            Order Guide
+            Cara Pesan
           </p>
 
           <h2 className="text-3xl font-bold md:text-4xl">
-            Terms & Order Process
+            Terma dan Proses Pesanan
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#6F625A] md:text-base">

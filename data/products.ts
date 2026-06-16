@@ -1,38 +1,38 @@
 export const products = [
   {
-    name: "Mirrocoate Sticker",
-    tag: "Budget friendly",
-    price: "RM59 / 1000 pcs",
+    name: "Stiker Mirrocoate",
+    tag: "Mesra bajet",
+    price: "RM59 / 1000 keping",
     unitPrice: 59,
     description:
-      "A popular paper-based sticker with a smooth surface. Suitable for indoor labels, packaging, food labels, thank you stickers, and general product branding.",
-    bestFor: ["Food labels", "Packaging", "Thank you stickers", "Indoor use"],
+      "Stiker berasaskan kertas yang popular dengan permukaan licin. Sesuai untuk label dalaman, pembungkusan, label makanan, pelekat terima kasih, dan penjenamaan produk umum.",
+    bestFor: ["Label makanan", "Pembungkusan", "Pelekat terima kasih", "Penggunaan dalaman"],
   },
   {
     name: "Transparent White Ink",
-    tag: "Premium finish",
-    price: "RM59 / 500 pcs",
+    tag: "Kemasan premium",
+    price: "RM59 / 500 keping",
     unitPrice: 59,
     description:
-      "Transparent sticker with white ink to enhance color vibrancy while keeping a subtle, see-through finish. Ideal for glass, acrylic, and product packaging where a clean, minimal look is desired.",
-    bestFor: ["Product labels", "Brand stickers", "Packaging", "Premium look"],
+      "Stiker lut sinar dengan dakwat putih untuk meningkatkan kejelasan warna sambil mengekalkan kemasan lut sinar yang halus. Sesuai untuk kaca, akrilik, dan pembungkusan produk yang menginginkan penampilan bersih dan minimalis.",
+    bestFor: ["Label produk", "Pelekat jenama", "Pembungkusan", "Penampilan premium"],
   },
   {
-    name: "Waterproof Sticker",
-    tag: "Durable option",
-    price: "RM59 / 1000 pcs",
+    name: "Stiker Kalis Air",
+    tag: "Pilihan tahan lasak",
+    price: "RM59 / 1000 keping",
     unitPrice: 59,
     description:
-      "A more durable sticker option that is suitable for products exposed to moisture, cold surfaces, or handling. Great for bottles, drinks, frozen food, and outdoor-style usage.",
-    bestFor: ["Bottle labels", "Drinks", "Frozen food", "Moisture exposure"],
+      "Pilihan stiker yang lebih tahan lasak dan sesuai untuk produk yang terdedah kepada kelembapan, permukaan sejuk, atau kendalian. Sangat baik untuk botol, minuman, makanan sejuk beku, dan penggunaan gaya luaran.",
+    bestFor: ["Label botol", "Minuman", "Makanan sejuk beku", "Terdedah kepada lembapan"],
   },
   {
-    name: "Transparent Sticker",
-    tag: "Clean modern look",
-    price: "RM59 / 1000 pcs",
+    name: "Stiker Lut Sinar",
+    tag: "Penampilan moden bersih",
+    price: "RM59 / 1000 keping",
     unitPrice: 59,
     description:
-      "A clear sticker material that blends well with the product surface. Suitable for minimalist branding, glass bottles, jars, clear packaging, and premium product labels.",
-    bestFor: ["Glass bottles", "Jars", "Minimal labels", "Clear packaging"],
+      "Bahan stiker jernih yang sebati dengan permukaan produk. Sesuai untuk penjenamaan minimalis, botol kaca, balang, pembungkusan jernih, dan label produk premium.",
+    bestFor: ["Botol kaca", "Balang", "Label minimalis", "Pembungkusan jernih"],
   },
 ];

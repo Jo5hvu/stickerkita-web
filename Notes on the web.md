@@ -94,3 +94,19 @@ You can later add spam protection / captcha / admin dashboard
 
 5\. Add Excel export for monthly orders
 
+
+
+**Future update workflow**
+
+
+
+After this, your update process will be simple:
+
+
+
+git add .
+
+git commit -m "Update StickerKita website"
+
+git push origin main
+

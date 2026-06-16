@@ -15,12 +15,11 @@ export default function FAQ() {
           </p>
 
           <h2 className="text-3xl font-bold md:text-4xl">
-            Questions Before Ordering?
+            Ada Pertanyaan Sebelum Membuat Pesanan?
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#6F625A] md:text-base">
-            Here are some common questions about our sticker materials, design
-            process, payment, and printing timeline.
+            Berikut adalah beberapa soalan lazim tentang bahan pelekat kami, proses reka bentuk, pembayaran, dan tempoh masa percetakan.
           </p>
         </div>
 

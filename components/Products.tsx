@@ -6,16 +6,15 @@ export default function Products() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 text-center">
           <p className="mb-3 inline-block rounded-full bg-[#FFE1C2] px-4 py-2 text-xs font-semibold text-[#FD7C03] md:text-sm">
-            Sticker materials
+            Material Sticker
           </p>
 
           <h2 className="text-3xl font-bold md:text-4xl">
-            Choose Your Sticker Type
+            Pilih Jenis Sticker Anda
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#6F625A] md:text-base">
-            We provide different sticker materials depending on your product,
-            budget, finishing, and usage.
+            Kami menyediakan bahan pelekat yang berbeza bergantung pada produk, bajet, kemasan, dan kegunaan anda.
           </p>
         </div>
 
@@ -60,7 +59,7 @@ export default function Products() {
                 href="/order"
                 className="mt-6 inline-block rounded-full bg-[#FD7C03] px-5 py-3 text-center text-sm font-semibold text-white transition hover:opacity-90"
               >
-                Choose This Type
+                Pilih jenis ini
               </a>
             </div>
           ))}

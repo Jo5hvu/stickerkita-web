@@ -19,11 +19,10 @@ Terima kasih.`
   return (
     <section id="order" className="px-6 py-20 md:px-16">
       <div className="rounded-[2rem] bg-[#2B1B12] px-8 py-16 text-center text-white md:px-16">
-        <h2 className="text-4xl font-bold">Ready to print your stickers?</h2>
+        <h2 className="text-4xl font-bold">Sedia untuk cetak sticker anda??</h2>
 
         <p className="mx-auto mt-4 max-w-2xl text-white/70">
-          Send us your sticker details and we will help you choose the best
-          material, size, quantity, and finishing for your product or packaging.
+          Hantarkan butiran pelekat anda kepada kami, dan kami akan membantu anda memilih bahan, saiz, kuantiti, serta kemasan yang terbaik untuk produk atau pembungkusan anda.
         </p>
 
         <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
@@ -33,14 +32,14 @@ Terima kasih.`
             rel="noopener noreferrer"
             className="rounded-full bg-[#FD7C03] px-8 py-4 font-semibold text-white transition hover:opacity-90"
           >
-            Order via WhatsApp
+            Order melalui WhatsApp
           </a>
 
           <a
             href={`mailto:${BRAND.email}`}
             className="rounded-full border border-white/30 px-8 py-4 font-semibold text-white transition hover:bg-white hover:text-[#2B1B12]"
           >
-            Email Us
+            Email Kami
           </a>
         </div>
       </div>

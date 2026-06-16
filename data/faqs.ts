@@ -1,42 +1,42 @@
 export const faqs = [
   {
-    question: "What sticker materials do you provide?",
+    question: "Apakah bahan stiker yang anda sediakan?",
     answer:
-      "We provide Mirrorcoat, Mirrorcoat + Gloss, Waterproof, and Transparent stickers. Each material is suitable for different product needs, finishing, and budget.",
+      "Kami menyediakan stiker Mirrorcoat, Mirrorcoat + Gloss, Kalis Air, dan Lut Sinar. Setiap bahan sesuai untuk keperluan produk, kemasan, dan bajet yang berbeza.",
   },
   {
-    question: "What is the difference between Mirrorcoat and Waterproof sticker?",
+    question: "Apakah perbezaan antara stiker Mirrorcoat dan stiker Kalis Air?",
     answer:
-      "Mirrorcoat is suitable for general indoor labels and packaging. Waterproof sticker is more suitable for products exposed to moisture, bottles, cold items, or frequent handling.",
+      "Mirrorcoat sesuai untuk label dalaman am dan pembungkusan. Stiker Kalis Air lebih sesuai untuk produk yang terdedah kepada kelembapan, botol, barang sejuk, atau kendalian yang kerap.",
   },
   {
-    question: "Can I use my own design?",
+    question: "Bolehkah saya menggunakan reka bentuk saya sendiri?",
     answer:
-      "Yes. You can use your own design. After submitting the order form, please send your design file or reference image through WhatsApp.",
+      "Ya. Anda boleh menggunakan reka bentuk sendiri. Selepas menghantar borang pesanan, sila hantar fail reka bentuk atau gambar rujukan anda melalui WhatsApp.",
   },
   {
-    question: "Can StickerKita help me create a design?",
+    question: "Bolehkah StickerKita membantu saya mencipta reka bentuk?",
     answer:
-      "Yes. We can help prepare a design draft based on your brand name, preferred theme, color, text, and reference image.",
+      "Ya. Kami boleh membantu menyediakan draf reka bentuk berdasarkan nama jenama, tema pilihan, warna, teks, dan gambar rujukan anda.",
   },
   {
-    question: "How long does the design process take?",
+    question: "Berapa lamakah proses reka bentuk mengambil masa?",
     answer:
-      "The design process usually takes 1–3 working days, depending on the design details and revision requirements.",
+      "Proses reka bentuk biasanya mengambil masa 1–3 hari bekerja, bergantung pada butiran reka bentuk dan keperluan semakan.",
   },
   {
-    question: "How long does printing take?",
+    question: "Berapa lamakah proses percetakan mengambil masa?",
     answer:
-      "The printing process usually takes 7–14 working days after the design is confirmed and full payment has been made.",
+      "Proses percetakan biasanya mengambil masa 7–14 hari bekerja selepas reka bentuk disahkan dan bayaran penuh dibuat.",
   },
   {
-    question: "Is deposit required?",
+    question: "Adakah deposit diperlukan?",
     answer:
-      "Yes. A deposit of RM30 is required to start the design process. Full payment is required before printing begins.",
+      "Ya. Deposit sebanyak RM30 diperlukan untuk memulakan proses reka bentuk. Bayaran penuh diperlukan sebelum percetakan bermula.",
   },
   {
-    question: "Can I revise the design draft?",
+    question: "Bolehkah saya menyemak semula draf reka bentuk?",
     answer:
-      "Yes. Design revision is allowed, but more than 3 draft changes may be charged RM10 for each additional correction.",
+      "Ya. Semakan reka bentuk dibenarkan, tetapi lebih daripada 3 kali perubahan draf mungkin akan dikenakan bayaran RM10 untuk setiap pembetulan tambahan.",
   },
 ];

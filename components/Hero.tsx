@@ -16,15 +16,15 @@ export default function Hero() {
 
   const servicePoints = [
     {
-      title: "Easy Custom Ordering",
+      title: "Tempahan Sesuaian yang Mudah",
       icon: "order",
     },
     {
-      title: "Quality Materials & Finishing",
+      title: "Bahan Berkualiti & Kemasan Halus",
       icon: "quality",
     },
     {
-      title: "Ideal for Brands & Packaging",
+      title: "Sesuai untuk Jenama & Pembungkusan",
       icon: "package",
     },
   ];

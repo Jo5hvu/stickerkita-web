@@ -83,16 +83,15 @@ export default function StickerPriceCalculator() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 text-center">
           <p className="mb-3 inline-block rounded-full bg-[#FFE1C2] px-4 py-2 text-xs font-semibold text-[#FD7C03] md:text-sm">
-            Instant price estimate
+            Angaran Harga Segera
           </p>
 
           <h2 className="text-3xl font-bold md:text-4xl">
-            Calculate Your Sticker Price
+            Kira Harga Sticker Anda
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#6F625A] md:text-base">
-            Enter your sticker size and quantity to estimate how many stickers
-            fit in one sheet and your estimated order price.
+            Masukkan saiz dan kuantiti pelekat anda untuk menganggarkan berapa banyak pelekat yang muat dalam satu helaian serta anggaran harga pesanan anda.
           </p>
         </div>
 
@@ -104,7 +103,7 @@ export default function StickerPriceCalculator() {
             <div className="space-y-5">
               <div>
                 <label className="mb-2 block text-sm font-semibold">
-                  Sticker Material
+                  Material Sticker
                 </label>
 
                 <select
@@ -124,7 +123,7 @@ export default function StickerPriceCalculator() {
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">
-                  Sticker Shape
+                  Bentuk Sticker
                 </label>
 
                 <select
@@ -133,15 +132,15 @@ export default function StickerPriceCalculator() {
                   onChange={handleChange}
                   className="w-full rounded-2xl border border-[#EAD8C8] bg-white p-4 outline-none focus:border-[#FD7C03]"
                 >
-                  <option value="Circle">Circle</option>
-                  <option value="Square">Square</option>
-                  <option value="Rectangle">Rectangle</option>
-                  <option value="Oval">Oval</option>
-                  <option value="Custom Shape">Custom Shape</option>
+                  <option value="Circle">Bulat</option>
+                  <option value="Square">Petak</option>
+                  <option value="Rectangle">Segi empat tepat</option>
+                  <option value="Oval">Bujur</option>
+                  <option value="Custom Shape">Custom Bentuk</option>
                 </select>
                 {formData.shape === "Custom Shape" && (
                   <p className="mt-2 text-xs text-amber-600">
-                    ⚡ Custom shape adds +20% to the base price.
+                    ⚡ Bentuk custom tambah +20% kepada harga asas.
                   </p>
                 )}
               </div>
@@ -149,7 +148,7 @@ export default function StickerPriceCalculator() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-semibold">
-                    Width{" "}
+                    Lebar{" "}
                     <span className="text-[#6F625A]">
                       Min: 10mm, Max: 308mm
                     </span>
@@ -168,14 +167,14 @@ export default function StickerPriceCalculator() {
 
                   {!isWidthValid && width > 0 && (
                     <p className="mt-2 text-xs text-red-500">
-                      Width must be between 10mm and 308mm.
+                      Lebar mesti diantara 10mm dan 308mm.
                     </p>
                   )}
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-semibold">
-                    Height{" "}
+                    Tinggi{" "}
                     <span className="text-[#6F625A]">
                       Min: 10mm, Max: 460mm
                     </span>
@@ -194,7 +193,7 @@ export default function StickerPriceCalculator() {
 
                   {!isHeightValid && height > 0 && (
                     <p className="mt-2 text-xs text-red-500">
-                      Height must be between 10mm and 460mm.
+                      Tinggi mesti diantara 10mm dan 460mm.
                     </p>
                   )}
                 </div>
@@ -206,7 +205,7 @@ export default function StickerPriceCalculator() {
                     W: {pcsPerRow}, H: {pcsPerColumn} pcs
                   </p>
                   <p className="mt-1">
-                    Qty per sheet: {pcsPerSheet} pcs | Sheets needed:{" "}
+                    Qty per sheet: {pcsPerSheet} pcs | Helaian yang diperlukan:{" "}
                     {sheetQty}
                   </p>
                 </div>
@@ -214,7 +213,7 @@ export default function StickerPriceCalculator() {
 
               <div>
                 <label className="mb-2 block text-sm font-semibold">
-                  Quantity <span className="text-red-500">*</span>
+                  Kuantiti <span className="text-red-500">*</span>
                 </label>
 
                 <input
@@ -237,7 +236,7 @@ export default function StickerPriceCalculator() {
 
           {/* Result Card */}
           <div className="rounded-[2rem] bg-[#2B1B12] p-5 text-white md:p-8">
-            <h3 className="text-2xl font-bold">Estimated Cost</h3>
+            <h3 className="text-2xl font-bold">Anggaran kos</h3>
 
             <div className="mt-6 rounded-3xl bg-white/10 p-5">
               <p className="text-sm text-white/70">Material</p>
@@ -245,7 +244,7 @@ export default function StickerPriceCalculator() {
             </div>
 
             <div className="mt-4 rounded-3xl bg-white/10 p-5">
-              <p className="text-sm text-white/70">Shape</p>
+              <p className="text-sm text-white/70">Bentuk</p>
               <p className="mt-1 text-xl font-bold">
                 {formData.shape}
                 {formData.shape === "Custom Shape" && (
@@ -264,9 +263,9 @@ export default function StickerPriceCalculator() {
             </div>
 
             <div className="mt-4 rounded-3xl bg-white/10 p-5">
-              <p className="text-sm text-white/70">Quantity per sheet</p>
+              <p className="text-sm text-white/70">Kuantiti per helaian</p>
               <p className="mt-1 text-xl font-bold">
-                {pcsPerSheet > 0 ? pcsPerSheet : 0} pcs / sheet
+                {pcsPerSheet > 0 ? pcsPerSheet : 0} pcs / helaian
               </p>
 
               <p className="mt-2 text-sm text-white/70">
@@ -275,15 +274,15 @@ export default function StickerPriceCalculator() {
             </div>
 
             <div className="mt-4 rounded-3xl bg-white/10 p-5">
-              <p className="text-sm text-white/70">Sheet quantity</p>
+              <p className="text-sm text-white/70">Kuantiti helaian</p>
               <p className="mt-1 text-xl font-bold">
-                {sheetQty} sheet{sheetQty > 1 ? "s" : ""}
+                {sheetQty} helaian{sheetQty > 1 ? "" : ""}
               </p>
             </div>
 
             <div className="mt-6 rounded-3xl bg-[#FD7C03] p-6">
               <p className="text-sm font-semibold text-white/80">
-                Total Estimate
+                Jumlah anggaran
               </p>
 
               <p className="mt-2 text-4xl font-bold">
@@ -302,12 +301,11 @@ export default function StickerPriceCalculator() {
               disabled={!isSizeValid || quantity <= 0}
               className="mt-6 w-full rounded-full bg-white px-8 py-4 font-semibold text-[#2B1B12] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Continue to Order
+              Teruskan untuk pesan
             </button>
 
             <p className="mt-4 text-center text-xs leading-5 text-white/60">
-              Final price may be confirmed again by admin before invoice is
-              issued.
+              Harga akhir mungkin akan disahkan semula oleh pentadbir sebelum invois dikeluarkan.
             </p>
           </div>
         </div>

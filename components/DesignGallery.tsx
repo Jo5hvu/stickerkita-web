@@ -34,12 +34,11 @@ export default function DesignGallery() {
           </p>
 
           <h2 className="text-3xl font-bold md:text-4xl">
-            Choose Your Sticker Design
+            Pilih Design Sticker Anda!
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#6F625A] md:text-base">
-            Browse ready-made sticker design ideas. Click on any design to view
-            it larger, then use the design code when placing your order.
+            Layari idea reka bentuk pelekat siap sedia. Klik pada mana-mana reka bentuk untuk melihatnya dengan lebih besar, kemudian gunakan kod reka bentuk semasa membuat pesanan.
           </p>
         </div>
 
@@ -94,7 +93,7 @@ export default function DesignGallery() {
 
                   <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition group-hover:bg-black/30 group-hover:opacity-100">
                     <span className="rounded-full bg-white px-4 py-2 text-xs font-bold text-[#2B1B12]">
-                      Click to enlarge
+                      Tekan untuk besarkan
                     </span>
                   </div>
                 </div>
@@ -111,7 +110,7 @@ export default function DesignGallery() {
                   href={`/order?design=${design.code}`}
                   className="mt-4 inline-block w-full rounded-full bg-[#FD7C03] px-5 py-3 text-center text-sm font-semibold text-white transition hover:opacity-90"
                 >
-                  Order This Design
+                  Pesan Design Ini
                 </a>
               </div>
             </div>
@@ -158,7 +157,7 @@ export default function DesignGallery() {
                 href={`/order?design=${selectedDesign.code}`}
                 className="rounded-full bg-[#FD7C03] px-6 py-3 text-center text-sm font-semibold text-white transition hover:opacity-90"
               >
-                Order This Design
+                Pesan Design Ini
               </a>
             </div>
           </div>
